@@ -1,0 +1,27 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compile",
+            "type": "shell",
+            "command": "python ${env:CP_COMMON_UTIL_DIR}${pathSeparator}processor.py -compile ${fileBasename}",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Run",
+            "type": "shell",
+            "command": "python ${env:CP_COMMON_UTIL_DIR}${pathSeparator}processor.py -run ${fileBasename}",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        }
+
+    ]
+}

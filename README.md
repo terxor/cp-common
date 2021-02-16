@@ -1,2 +1,3 @@
 # cp-common
-Commonly used implementations/utilities for competitive programming
+
+Implementations/utilities for competitive programming
