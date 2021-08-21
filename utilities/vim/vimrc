@@ -1,27 +1,72 @@
-" Basic Settings
-syntax on
-set ruler number autoindent incsearch
-set nowrap autoread showcmd showtabline=2
-set tabstop=2 shiftwidth=2 expandtab
-set timeoutlen=200 backspace=2 belloff=all
-set termguicolors
-colorscheme molokai 
+" Search
+set incsearch
+set ignorecase
+set smartcase
 
-" Mappings
-let mapleader = ","
+" Status bar: mode, partial command
+set showmode
+set showcmd
+
+" Timeout for mapped key sequences
+set timeout
+set timeoutlen=200
+
+" Number of lines to scroll with U & D
+" Scroll offset, Relative numbers
+set scroll=10
+set scrolloff=3
+set relativenumber
+
+" Basic mappings
+let mapleader = " "
 inoremap kj <esc>
 map ; $
 
-nnoremap <leader>t :set textwidth=64 linebreak<CR>
+" Use Q for formatting instead of ex-mode
+map Q gq
+
+" --------------------------------
+
+" Show position in status bar
+set ruler 
+
+" Copy indent from current line while moving to next line
+set autoindent 
+
+" Do not wrap lines
+set nowrap 
+
+" Auto reload file if changed outside
+set autoread 
+
+" Normal backspace in insert mode
+set backspace=2 
+
+" No sounds
+set belloff=all 
+
+" Show tabs line
+set showtabline=2 
+
+" Tab settings
+set tabstop=2
+set shiftwidth=2
+set expandtab
+
+" Colors setting for terminal
+set termguicolors 
+
+" Wildmenu
+set wildmenu
+set wildmode=longest:full,full
+" --------------------------------
+
+colorscheme molokai 
+syntax on
+
+" Mappings
 nnoremap <leader>r {gq}
 nnoremap <leader>e gq$
-
-nnoremap <leader>c :call Compile()<CR>
-nnoremap <leader>v :call Run()<CR>
-
-nnoremap <leader>1 :call LoadTemplate(1)<CR>
-nnoremap <leader>2 :call LoadTemplate(2)<CR>
-nnoremap <leader>3 :call LoadTemplate(3)<CR>
 
 " Makes switching windows easier
 nnoremap <c-j> <c-w>j
@@ -29,98 +74,15 @@ nnoremap <c-k> <c-w>k
 nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
 
-" Normal paste in inline terminal
-tmap <C-v> <C-w>"+
+" Automatically change directory in vim
+set autochdir
+let g:netrw_fastbrowse = 0
+autocmd FileType netrw setl bufhidden=wipe
 
-" Utility
-let g:utilDir = $CP_COMMON_UTIL_DIR
-let g:templates = ["template-basic.cpp", "template.cpp", "template-ext.cpp"]
+" Load CP environment
+command CP source $CP_COMMON_UTIL_DIR/vim/cp.vim
 
-function! LoadTemplate(id)
-	let s = ":0r " . g:utilDir . "/templates/" . g:templates[a:id - 1]
-	" Delete first
-	execute ":normal ggdG"
-	execute s
-endfunction
+" Text Formatting environment
+command TF set textwidth=64 linebreak
 
-function! ExecCommand(cmd)
-  execute ":vertical belowright term cmd.exe /c (" . a:cmd . ")"
-endfunction
-
-function! Compile()
-	execute ":w"
-	call ExecCommand("python " . g:utilDir . "/processor.py -compile %")
-endfunction
-
-function! Run()
-	call ExecCommand("python " . g:utilDir . "/processor.py -run %")
-endfunction
-
-" Wildmenu
-set wildmenu wildmode=longest:full,full
-
-" Custom tabline
-set tabline=%!MyTabLine()  " custom tab pages line
-function! MyTabLine()
-  let s = ''
-  " loop through each tab page
-  for i in range(tabpagenr('$'))
-    if i + 1 == tabpagenr()
-      let s .= '%#TabLineSel#'
-    else
-      let s .= '%#TabLine#'
-    endif
-    if i + 1 == tabpagenr()
-      let s .= '%#TabLineSel#' " WildMenu
-    else
-      let s .= '%#Title#'
-    endif
-    " set the tab page number (for mouse clicks)
-    let s .= '%' . (i + 1) . 'T '
-    " set page number string
-    let s .= i + 1 . ''
-    " get buffer names and statuses
-    let n = ''  " temp str for buf names
-    let m = 0   " &modified counter
-    let buflist = tabpagebuflist(i + 1)
-    " loop through each buffer in a tab
-    for b in buflist
-      if getbufvar(b, "&buftype") == 'help'
-        " let n .= '[H]' . fnamemodify(bufname(b), ':t:s/.txt$//')
-      elseif getbufvar(b, "&buftype") == 'quickfix'
-        " let n .= '[Q]'
-      elseif getbufvar(b, "&modifiable")
-        let n .= fnamemodify(bufname(b), ':t') . ', ' " pathshorten(bufname(b))
-      endif
-      if getbufvar(b, "&modified")
-        let m += 1
-      endif
-    endfor
-    " let n .= fnamemodify(bufname(buflist[tabpagewinnr(i + 1) - 1]), ':t')
-    let n = substitute(n, ', $', '', '')
-    " add modified label
-    if m > 0
-      let s .= '+'
-      " let s .= '[' . m . '+]'
-    endif
-    if i + 1 == tabpagenr()
-      let s .= ' %#TabLineSel#'
-    else
-      let s .= ' %#TabLine#'
-    endif
-    " add buffer names
-    if n == ''
-      let s.= '[New]'
-    else
-      let s .= n
-    endif
-    " switch to no underlining and add final space
-    let s .= ' '
-  endfor
-  let s .= '%#TabLineFill#%T'
-  " right-aligned close button
-  " if tabpagenr('$') > 1
-  "   let s .= '%=%#TabLineFill#%999Xclose'
-  " endif
-  return s
-endfunction
+" --------------------------------
