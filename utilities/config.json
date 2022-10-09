@@ -2,9 +2,9 @@
   "langs" : [
     {
       "name": "C++",
-      "ext": "cpp",
+      "ext": "cc",
       "commands": {
-        "compile": "g++ %.cpp -o % -std=c++11 -O2 -Wall -Wextra -DXVENOM",
+        "compile": "g++ %.cc -o % -std=c++17 -O2 -Wall -Wextra -DXVENOM",
         "run" : "%"
       }
     },
@@ -31,5 +31,5 @@
     "useSameDir": true,
     "timeLimit": 2
   },
-  "useColors" : true
+  "useColors" : false
 }

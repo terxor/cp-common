@@ -35,7 +35,7 @@ def compile(srcName, lang):
   if not "compile" in commands.keys():
     pf("Compile command not defined", "WARNING")
     return
-  pf("Compiling... (LANG = " + lang["name"] + ")", "NONE")
+  pf("Compile (lang = " + lang["name"] + ")", "NONE")
   cc = commands["compile"].replace("%", srcName)
   result = subprocess.run(cc, cwd = os.getcwd(), shell=True)
   if result.returncode == 0:
@@ -44,7 +44,7 @@ def compile(srcName, lang):
     pf("FAILED", "FAIL")
 
 def run(srcName, lang):
-  pf("Running...", "BOLD")
+  # pf("Running...", "BOLD")
   runCommand = lang["commands"]["run"].replace("%", srcName)
   rc = config["runConfig"]
   inFile = None
@@ -54,16 +54,21 @@ def run(srcName, lang):
     inFile = open(fd + rc["inputFile"], "r");
     outFile = open(fd + rc["outputFile"], "w");
   try:
+    pf("---- STDIN -----", "UNDERLINE")
     result = subprocess.run(
-      runCommand, 
+      runCommand,
       cwd = os.getcwd(), 
-      shell=True,
       timeout=(None if rc["terminalIO"] else rc["timeLimit"]),
-      stdin=inFile,
-      stdout=outFile
+      stdin=sys.stdin,
+      capture_output=True
     )
-    pf("Finished", "OKGREEN")
-  except:
+    pf("---- STDOUT ----", "UNDERLINE")
+    pf(result.stdout.decode("utf-8"), "BOLD")
+    pf("---- STDERR ----", "UNDERLINE")
+    pf(result.stderr.decode("utf-8"), "WARNING")
+    pf("----------------", "NONE")
+  except Exception as e:
+    print(e)
     pf("Time Limit Exceeded (" + str(rc["timeLimit"]) + " seconds)", "FAIL")
 
 def err(s):

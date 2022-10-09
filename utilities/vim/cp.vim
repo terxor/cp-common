@@ -20,14 +20,14 @@ function! LoadTemplate(id)
 endfunction
 
 function! ExecCommand(cmd)
-  execute ":vertical belowright term cmd.exe /c (" . a:cmd . ")"
+  execute ":vertical belowright term " . a:cmd
 endfunction
 
 function! Compile()
-	execute ":w"
-	call ExecCommand("python " . g:utilDir . "/processor.py -compile %")
+  execute ":w"
+  call ExecCommand("python.exe " . g:utilDir . "/processor.py -compile %")
 endfunction
 
 function! Run()
-	call ExecCommand("python " . g:utilDir . "/processor.py -run %")
+  call ExecCommand("python.exe " . g:utilDir . "/processor.py -run %")
 endfunction

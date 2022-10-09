@@ -13,6 +13,7 @@ various languages at one place, you may use the following setup.
 ## Setup on Visual Studio Code
 
 - From the command palette (ctrl+shift+p) open "Tasks: Open User tasks"
+0 Select 'Other'
 - Paste the contents of `tasks.json` there.
 
 Now, test the setup:
