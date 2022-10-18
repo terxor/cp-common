@@ -1,4 +1,4 @@
-set guifont=Anonymous\ Pro:h14
+set guifont=JetBrains\ Mono:h12
 
 " No GUI toolbar
 set guioptions-=T
