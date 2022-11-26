@@ -8,6 +8,11 @@ various languages at one place, you may use the following setup.
 - Python 3.0 or above
 - Environment variable `CP_COMMON_UTIL_DIR` pointing to this directory
 
+For CPP:
+- Add (if already exists) to environment variable `CPLUS_INCLUDE_PATH` pointing to `cpp`
+  under this directory
+- This will allow local `#include`s.
+
 ***
 
 ## Setup on Visual Studio Code
